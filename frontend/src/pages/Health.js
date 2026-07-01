@@ -1,17 +1,46 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Health() {
   const navigate = useNavigate();
+  const [healthScores, setHealthScores] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const [newHealth, setNewHealth] = useState({
+    operation_id: 1,
+    efficiency_score: 0,
+    productivity_score: 0,
+    overall_score: 0
+  });
 
-  const operations = [
-    { id: 1, name: 'Production Line A', efficiency: 85, productivity: 78, overall: 82 },
-    { id: 2, name: 'Supply Chain B', efficiency: 92, productivity: 88, overall: 90 },
-    { id: 3, name: 'Quality Control C', efficiency: 70, productivity: 65, overall: 68 },
-    { id: 4, name: 'HR Department', efficiency: 95, productivity: 90, overall: 93 },
-  ];
+  const API = 'http://127.0.0.1:8000/api/health';
 
-  const overallHealth = 85;
+  useEffect(() => { fetchHealth(); }, []);
+
+  const fetchHealth = async () => {
+    try {
+      const res = await axios.get(API + '/');
+      setHealthScores(res.data);
+    } catch (err) { console.log(err); }
+  };
+
+  const handleAdd = async () => {
+    try {
+      await axios.post(API + '/', newHealth);
+      fetchHealth();
+      setShowForm(false);
+    } catch (err) { console.log(err); }
+  };
+
+  const getColor = (score) => {
+    if (score >= 85) return '#2ecc71';
+    if (score >= 70) return '#f39c12';
+    return '#e74c3c';
+  };
+
+  const overallHealth = healthScores.length > 0
+    ? Math.round(healthScores.reduce((sum, h) => sum + h.overall_score, 0) / healthScores.length)
+    : 0;
 
   const sidebarItems = [
     { name: '📊 Dashboard', path: '/dashboard' },
@@ -24,12 +53,6 @@ function Health() {
     { name: '💚 Health Score', path: '/health' },
     { name: '🧠 AI Assistant', path: '/assistant' },
   ];
-
-  const getColor = (score) => {
-    if (score >= 85) return '#2ecc71';
-    if (score >= 70) return '#f39c12';
-    return '#e74c3c';
-  };
 
   return (
     <div style={{ display: 'flex', height: '100vh', background: '#f0f2f5' }}>
@@ -61,12 +84,25 @@ function Health() {
       </div>
 
       <div style={{ flex: 1, padding: '30px', overflowY: 'auto' }}>
-        <h1 style={{ color: '#1a1a2e', fontSize: '28px', marginBottom: '5px' }}>
-          💚 Operational Health Score
-        </h1>
-        <p style={{ color: '#666', marginBottom: '30px' }}>
-          Overall organizational health
-        </p>
+        <div style={{
+          display: 'flex', justifyContent: 'space-between',
+          alignItems: 'center', marginBottom: '30px',
+        }}>
+          <div>
+            <h1 style={{ color: '#1a1a2e', fontSize: '28px', margin: 0 }}>
+              💚 Health Score
+            </h1>
+            <p style={{ color: '#666', margin: 0 }}>Operational health monitoring</p>
+          </div>
+          <button onClick={() => setShowForm(!showForm)} style={{
+            background: 'linear-gradient(135deg, #0f3460, #533483)',
+            color: 'white', border: 'none',
+            padding: '12px 25px', borderRadius: '8px',
+            cursor: 'pointer', fontWeight: 'bold',
+          }}>
+            + Add Score
+          </button>
+        </div>
 
         {/* Overall Score Circle */}
         <div style={{
@@ -95,7 +131,47 @@ function Health() {
           </div>
         </div>
 
-        {/* Operation Wise Score */}
+        {showForm && (
+          <div style={{
+            background: 'white', padding: '25px',
+            borderRadius: '12px', marginBottom: '25px',
+            boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+          }}>
+            <h3 style={{ marginBottom: '20px' }}>Add Health Score</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '15px' }}>
+              <input
+                type="number"
+                placeholder="Efficiency Score"
+                value={newHealth.efficiency_score}
+                onChange={(e) => setNewHealth({ ...newHealth, efficiency_score: parseFloat(e.target.value) })}
+                style={{ padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
+              />
+              <input
+                type="number"
+                placeholder="Productivity Score"
+                value={newHealth.productivity_score}
+                onChange={(e) => setNewHealth({ ...newHealth, productivity_score: parseFloat(e.target.value) })}
+                style={{ padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
+              />
+              <input
+                type="number"
+                placeholder="Overall Score"
+                value={newHealth.overall_score}
+                onChange={(e) => setNewHealth({ ...newHealth, overall_score: parseFloat(e.target.value) })}
+                style={{ padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
+              />
+            </div>
+            <button onClick={handleAdd} style={{
+              marginTop: '15px', background: '#2ecc71',
+              color: 'white', border: 'none',
+              padding: '10px 25px', borderRadius: '8px',
+              cursor: 'pointer', fontWeight: 'bold',
+            }}>
+              ✅ Save Score
+            </button>
+          </div>
+        )}
+
         <div style={{
           background: 'white', borderRadius: '12px',
           boxShadow: '0 4px 15px rgba(0,0,0,0.1)', overflow: 'hidden',
@@ -103,46 +179,54 @@ function Health() {
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ background: '#0f3460', color: 'white' }}>
-                <th style={{ padding: '15px', textAlign: 'left' }}>Operation</th>
-                <th style={{ padding: '15px', textAlign: 'left' }}>Efficiency Score</th>
-                <th style={{ padding: '15px', textAlign: 'left' }}>Productivity Score</th>
-                <th style={{ padding: '15px', textAlign: 'left' }}>Overall Score</th>
+                <th style={{ padding: '15px', textAlign: 'left' }}>ID</th>
+                <th style={{ padding: '15px', textAlign: 'left' }}>Efficiency</th>
+                <th style={{ padding: '15px', textAlign: 'left' }}>Productivity</th>
+                <th style={{ padding: '15px', textAlign: 'left' }}>Overall</th>
               </tr>
             </thead>
             <tbody>
-              {operations.map((op, index) => (
-                <tr key={op.id} style={{
-                  background: index % 2 === 0 ? '#f8f9fa' : 'white',
-                  borderBottom: '1px solid #eee',
-                }}>
-                  <td style={{ padding: '15px', fontWeight: 'bold' }}>{op.name}</td>
-                  <td style={{ padding: '15px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <div style={{ width: '100px', height: '8px', background: '#eee', borderRadius: '4px' }}>
-                        <div style={{
-                          width: `${op.efficiency}%`, height: '8px',
-                          background: getColor(op.efficiency), borderRadius: '4px',
-                        }}></div>
-                      </div>
-                      {op.efficiency}%
-                    </div>
-                  </td>
-                  <td style={{ padding: '15px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <div style={{ width: '100px', height: '8px', background: '#eee', borderRadius: '4px' }}>
-                        <div style={{
-                          width: `${op.productivity}%`, height: '8px',
-                          background: getColor(op.productivity), borderRadius: '4px',
-                        }}></div>
-                      </div>
-                      {op.productivity}%
-                    </div>
-                  </td>
-                  <td style={{ padding: '15px', fontWeight: 'bold', color: getColor(op.overall) }}>
-                    {op.overall}%
+              {healthScores.length === 0 ? (
+                <tr>
+                  <td colSpan="4" style={{ padding: '20px', textAlign: 'center', color: '#666' }}>
+                    No health scores yet!
                   </td>
                 </tr>
-              ))}
+              ) : (
+                healthScores.map((h, index) => (
+                  <tr key={h.score_id} style={{
+                    background: index % 2 === 0 ? '#f8f9fa' : 'white',
+                    borderBottom: '1px solid #eee',
+                  }}>
+                    <td style={{ padding: '15px' }}>{h.score_id}</td>
+                    <td style={{ padding: '15px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div style={{ width: '100px', height: '8px', background: '#eee', borderRadius: '4px' }}>
+                          <div style={{
+                            width: `${h.efficiency_score}%`, height: '8px',
+                            background: getColor(h.efficiency_score), borderRadius: '4px',
+                          }}></div>
+                        </div>
+                        {h.efficiency_score}%
+                      </div>
+                    </td>
+                    <td style={{ padding: '15px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div style={{ width: '100px', height: '8px', background: '#eee', borderRadius: '4px' }}>
+                          <div style={{
+                            width: `${h.productivity_score}%`, height: '8px',
+                            background: getColor(h.productivity_score), borderRadius: '4px',
+                          }}></div>
+                        </div>
+                        {h.productivity_score}%
+                      </div>
+                    </td>
+                    <td style={{ padding: '15px', fontWeight: 'bold', color: getColor(h.overall_score) }}>
+                      {h.overall_score}%
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Assistant() {
   const navigate = useNavigate();
@@ -7,32 +8,25 @@ function Assistant() {
     { sender: 'ai', text: 'Hello! I am OpsMind AI Assistant. How can I help you today?' },
   ]);
   const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return;
-
     const userMessage = { sender: 'user', text: input };
-    setMessages([...messages, userMessage]);
+    setMessages(prev => [...prev, userMessage]);
+    setLoading(true);
 
-    setTimeout(() => {
-      let response = "I'm analyzing your operational data...";
-      
-      if (input.toLowerCase().includes('health')) {
-        response = "Current Operational Health Score is 85%. Operations are running efficiently!";
-      } else if (input.toLowerCase().includes('risk')) {
-        response = "There are 3 active risk alerts. 1 Critical risk needs immediate attention!";
-      } else if (input.toLowerCase().includes('report')) {
-        response = "Here's your summary: 24 Operations active, 18 Resources in use, 12 AI Predictions made today.";
-      } else if (input.toLowerCase().includes('recommendation')) {
-        response = "Top recommendation: Schedule preventive maintenance for Machine A immediately!";
-      } else {
-        response = "I can help you with Health Score, Risk Analysis, Reports, and Recommendations. What would you like to know?";
-      }
-
-      setMessages(prev => [...prev, { sender: 'ai', text: response }]);
-    }, 800);
-
+    try {
+      const res = await axios.post('http://127.0.0.1:8000/api/assistant/chat', {
+        user_id: 1,
+        user_query: input
+      });
+      setMessages(prev => [...prev, { sender: 'ai', text: res.data.response }]);
+    } catch (err) {
+      setMessages(prev => [...prev, { sender: 'ai', text: 'Sorry, I could not process that!' }]);
+    }
     setInput('');
+    setLoading(false);
   };
 
   const sidebarItems = [
@@ -84,12 +78,10 @@ function Assistant() {
           Ask anything about your operations
         </p>
 
-        {/* Chat Box */}
         <div style={{
           flex: 1, background: 'white', borderRadius: '12px',
           boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
-          padding: '20px', display: 'flex', flexDirection: 'column',
-          overflowY: 'auto', marginBottom: '15px',
+          padding: '20px', overflowY: 'auto', marginBottom: '15px',
         }}>
           {messages.map((msg, index) => (
             <div key={index} style={{
@@ -98,11 +90,10 @@ function Assistant() {
               marginBottom: '15px',
             }}>
               <div style={{
-                maxWidth: '60%',
-                padding: '12px 18px',
+                maxWidth: '60%', padding: '12px 18px',
                 borderRadius: '15px',
-                background: msg.sender === 'user' 
-                  ? 'linear-gradient(135deg, #0f3460, #533483)' 
+                background: msg.sender === 'user'
+                  ? 'linear-gradient(135deg, #0f3460, #533483)'
                   : '#f0f2f5',
                 color: msg.sender === 'user' ? 'white' : '#333',
                 fontSize: '14px',
@@ -112,31 +103,37 @@ function Assistant() {
               </div>
             </div>
           ))}
+          {loading && (
+            <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '15px' }}>
+              <div style={{
+                padding: '12px 18px', borderRadius: '15px',
+                background: '#f0f2f5', color: '#333', fontSize: '14px',
+              }}>
+                🤖 Thinking...
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Input Box */}
         <div style={{ display: 'flex', gap: '10px' }}>
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="Ask about health score, risks, reports..."
+            placeholder="Ask about health, risks, reports..."
             style={{
               flex: 1, padding: '14px',
               borderRadius: '10px', border: '1px solid #ddd',
               fontSize: '14px',
             }}
           />
-          <button
-            onClick={handleSend}
-            style={{
-              padding: '14px 25px',
-              background: 'linear-gradient(135deg, #0f3460, #533483)',
-              color: 'white', border: 'none',
-              borderRadius: '10px', cursor: 'pointer',
-              fontWeight: 'bold', fontSize: '14px',
-            }}
-          >
+          <button onClick={handleSend} disabled={loading} style={{
+            padding: '14px 25px',
+            background: 'linear-gradient(135deg, #0f3460, #533483)',
+            color: 'white', border: 'none',
+            borderRadius: '10px', cursor: 'pointer',
+            fontWeight: 'bold', fontSize: '14px',
+          }}>
             Send 📤
           </button>
         </div>

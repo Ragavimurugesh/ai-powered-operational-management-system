@@ -1,14 +1,29 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    alert('Welcome to OpsMind AI!');
-    navigate('/dashboard');
+  const handleLogin = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/api/auth/login', {
+        email: email,
+        password: password
+      });
+      localStorage.setItem('user', JSON.stringify(response.data));
+      alert('Welcome ' + response.data.name + '!');
+      navigate('/dashboard');
+    } catch (err) {
+      setError('Invalid email or password!');
+    }
+    setLoading(false);
   };
 
   return (
@@ -39,6 +54,20 @@ function Login() {
           marginBottom: '30px',
           fontSize: '13px',
         }}>AI Powered Operational Management</p>
+
+        {error && (
+          <div style={{
+            background: '#f8d7da',
+            color: '#721c24',
+            padding: '10px',
+            borderRadius: '8px',
+            marginBottom: '15px',
+            textAlign: 'center',
+            fontSize: '14px',
+          }}>
+            {error}
+          </div>
+        )}
 
         <input
           type="email"
@@ -74,19 +103,20 @@ function Login() {
 
         <button
           onClick={handleLogin}
+          disabled={loading}
           style={{
             width: '100%',
             padding: '12px',
-            background: 'linear-gradient(135deg, #0f3460, #533483)',
+            background: loading ? '#ccc' : 'linear-gradient(135deg, #0f3460, #533483)',
             color: 'white',
             border: 'none',
             borderRadius: '8px',
             fontSize: '16px',
-            cursor: 'pointer',
+            cursor: loading ? 'not-allowed' : 'pointer',
             fontWeight: 'bold',
           }}
         >
-          Login to OpsMind AI
+          {loading ? 'Logging in...' : 'Login to OpsMind AI'}
         </button>
 
         <p style={{
@@ -107,7 +137,6 @@ function Login() {
             Register Here
           </span>
         </p>
-
       </div>
     </div>
   );

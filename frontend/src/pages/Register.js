@@ -1,16 +1,32 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Register() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('Employee');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleRegister = () => {
-    alert('Registration Successful!');
-    navigate('/');
+  const handleRegister = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      await axios.post('http://127.0.0.1:8000/api/auth/register', {
+        name: name,
+        email: email,
+        password: password,
+        role: role
+      });
+      alert('Registration Successful! Please Login!');
+      navigate('/');
+    } catch (err) {
+      setError('Registration failed! Email may already exist!');
+    }
+    setLoading(false);
   };
 
   return (
@@ -41,6 +57,20 @@ function Register() {
           marginBottom: '30px',
           fontSize: '13px',
         }}>Create Your Account</p>
+
+        {error && (
+          <div style={{
+            background: '#f8d7da',
+            color: '#721c24',
+            padding: '10px',
+            borderRadius: '8px',
+            marginBottom: '15px',
+            textAlign: 'center',
+            fontSize: '14px',
+          }}>
+            {error}
+          </div>
+        )}
 
         <input
           type="text"
@@ -111,20 +141,21 @@ function Register() {
 
         <button
           onClick={handleRegister}
+          disabled={loading}
           style={{
             width: '100%',
             padding: '12px',
-            background: 'linear-gradient(135deg, #0f3460, #533483)',
+            background: loading ? '#ccc' : 'linear-gradient(135deg, #0f3460, #533483)',
             color: 'white',
             border: 'none',
             borderRadius: '8px',
             fontSize: '16px',
-            cursor: 'pointer',
+            cursor: loading ? 'not-allowed' : 'pointer',
             fontWeight: 'bold',
             marginBottom: '15px',
           }}
         >
-          Create Account
+          {loading ? 'Registering...' : 'Create Account'}
         </button>
 
         <p style={{
