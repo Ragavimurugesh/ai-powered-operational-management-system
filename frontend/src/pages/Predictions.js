@@ -1,13 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Predictions() {
   const navigate = useNavigate();
-  const [predictions, setPredictions] = useState([
-    { id: 1, operation: 'Production Line A', type: 'Delay Prediction', value: '3 Days Delay', date: '2026-06-29', model: 'Random Forest', risk: 'High' },
-    { id: 2, operation: 'Supply Chain B', type: 'Productivity', value: '92% Efficiency', date: '2026-06-29', model: 'Linear Regression', risk: 'Low' },
-    { id: 3, operation: 'Quality Control C', type: 'Failure Detection', value: '15% Failure Risk', date: '2026-06-29', model: 'Neural Network', risk: 'Medium' },
-  ]);
+  const [predictions, setPredictions] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const [newPred, setNewPred] = useState({
+    operation_id: 1,
+    prediction_type: '',
+    predicted_value: 0,
+    prediction_date: '',
+    model_used: ''
+  });
+
+  const API = 'http://127.0.0.1:8000/api/predictions';
+
+  useEffect(() => { fetchPredictions(); }, []);
+
+  const fetchPredictions = async () => {
+    try {
+      const res = await axios.get(API + '/');
+      setPredictions(res.data);
+    } catch (err) { console.log(err); }
+  };
+
+  const handleAdd = async () => {
+    try {
+      await axios.post(API + '/', newPred);
+      fetchPredictions();
+      setShowForm(false);
+    } catch (err) { console.log(err); }
+  };
 
   const sidebarItems = [
     { name: '📊 Dashboard', path: '/dashboard' },
@@ -23,7 +47,6 @@ function Predictions() {
 
   return (
     <div style={{ display: 'flex', height: '100vh', background: '#f0f2f5' }}>
-      {/* Sidebar */}
       <div style={{
         width: '250px',
         background: 'linear-gradient(180deg, #1a1a2e, #0f3460)',
@@ -35,55 +58,86 @@ function Predictions() {
         </h2>
         {sidebarItems.map((item, index) => (
           <div key={index} onClick={() => navigate(item.path)} style={{
-            padding: '12px 15px', marginBottom: '8px', borderRadius: '8px',
-            cursor: 'pointer', fontSize: '14px',
+            padding: '12px 15px', marginBottom: '8px',
+            borderRadius: '8px', cursor: 'pointer', fontSize: '14px',
             background: item.path === '/predictions' ? 'rgba(255,255,255,0.2)' : 'transparent',
           }}>
             {item.name}
           </div>
         ))}
         <div onClick={() => navigate('/')} style={{
-          marginTop: 'auto', padding: '12px 15px', borderRadius: '8px',
-          cursor: 'pointer', fontSize: '14px', background: '#e74c3c', textAlign: 'center',
+          marginTop: 'auto', padding: '12px 15px',
+          borderRadius: '8px', cursor: 'pointer',
+          fontSize: '14px', background: '#e74c3c', textAlign: 'center',
         }}>
           🚪 Logout
         </div>
       </div>
 
-      {/* Main Content */}
       <div style={{ flex: 1, padding: '30px', overflowY: 'auto' }}>
-        <h1 style={{ color: '#1a1a2e', fontSize: '28px', marginBottom: '5px' }}>
-          🤖 AI Predictions
-        </h1>
-        <p style={{ color: '#666', marginBottom: '30px' }}>
-          AI powered operational predictions
-        </p>
-
-        {/* Summary Cards */}
         <div style={{
-          display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '20px', marginBottom: '30px',
+          display: 'flex', justifyContent: 'space-between',
+          alignItems: 'center', marginBottom: '30px',
         }}>
-          {[
-            { label: 'Total Predictions', value: '12', icon: '🤖', color: '#3498db' },
-            { label: 'High Risk', value: '3', icon: '🔴', color: '#e74c3c' },
-            { label: 'Accuracy Rate', value: '94%', icon: '🎯', color: '#2ecc71' },
-          ].map((card, i) => (
-            <div key={i} style={{
-              background: 'white', padding: '25px', borderRadius: '12px',
-              boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
-              borderLeft: `5px solid ${card.color}`,
-            }}>
-              <div style={{ fontSize: '30px' }}>{card.icon}</div>
-              <div style={{ fontSize: '32px', fontWeight: 'bold', color: card.color }}>
-                {card.value}
-              </div>
-              <div style={{ color: '#666', fontSize: '14px' }}>{card.label}</div>
-            </div>
-          ))}
+          <div>
+            <h1 style={{ color: '#1a1a2e', fontSize: '28px', margin: 0 }}>🤖 AI Predictions</h1>
+            <p style={{ color: '#666', margin: 0 }}>AI powered predictions</p>
+          </div>
+          <button onClick={() => setShowForm(!showForm)} style={{
+            background: 'linear-gradient(135deg, #0f3460, #533483)',
+            color: 'white', border: 'none',
+            padding: '12px 25px', borderRadius: '8px',
+            cursor: 'pointer', fontWeight: 'bold',
+          }}>
+            + Add Prediction
+          </button>
         </div>
 
-        {/* Predictions Table */}
+        {showForm && (
+          <div style={{
+            background: 'white', padding: '25px',
+            borderRadius: '12px', marginBottom: '25px',
+            boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+          }}>
+            <h3 style={{ marginBottom: '20px' }}>Add New Prediction</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+              <input
+                placeholder="Prediction Type"
+                value={newPred.prediction_type}
+                onChange={(e) => setNewPred({ ...newPred, prediction_type: e.target.value })}
+                style={{ padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
+              />
+              <input
+                type="number"
+                placeholder="Predicted Value"
+                value={newPred.predicted_value}
+                onChange={(e) => setNewPred({ ...newPred, predicted_value: parseFloat(e.target.value) })}
+                style={{ padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
+              />
+              <input
+                type="date"
+                value={newPred.prediction_date}
+                onChange={(e) => setNewPred({ ...newPred, prediction_date: e.target.value })}
+                style={{ padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
+              />
+              <input
+                placeholder="Model Used"
+                value={newPred.model_used}
+                onChange={(e) => setNewPred({ ...newPred, model_used: e.target.value })}
+                style={{ padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
+              />
+            </div>
+            <button onClick={handleAdd} style={{
+              marginTop: '15px', background: '#2ecc71',
+              color: 'white', border: 'none',
+              padding: '10px 25px', borderRadius: '8px',
+              cursor: 'pointer', fontWeight: 'bold',
+            }}>
+              ✅ Save Prediction
+            </button>
+          </div>
+        )}
+
         <div style={{
           background: 'white', borderRadius: '12px',
           boxShadow: '0 4px 15px rgba(0,0,0,0.1)', overflow: 'hidden',
@@ -92,40 +146,33 @@ function Predictions() {
             <thead>
               <tr style={{ background: '#0f3460', color: 'white' }}>
                 <th style={{ padding: '15px', textAlign: 'left' }}>ID</th>
-                <th style={{ padding: '15px', textAlign: 'left' }}>Operation</th>
                 <th style={{ padding: '15px', textAlign: 'left' }}>Type</th>
                 <th style={{ padding: '15px', textAlign: 'left' }}>Predicted Value</th>
                 <th style={{ padding: '15px', textAlign: 'left' }}>Model Used</th>
-                <th style={{ padding: '15px', textAlign: 'left' }}>Risk Level</th>
                 <th style={{ padding: '15px', textAlign: 'left' }}>Date</th>
               </tr>
             </thead>
             <tbody>
-              {predictions.map((pred, index) => (
-                <tr key={pred.id} style={{
-                  background: index % 2 === 0 ? '#f8f9fa' : 'white',
-                  borderBottom: '1px solid #eee',
-                }}>
-                  <td style={{ padding: '15px' }}>{pred.id}</td>
-                  <td style={{ padding: '15px', fontWeight: 'bold' }}>{pred.operation}</td>
-                  <td style={{ padding: '15px' }}>{pred.type}</td>
-                  <td style={{ padding: '15px' }}>{pred.value}</td>
-                  <td style={{ padding: '15px' }}>{pred.model}</td>
-                  <td style={{ padding: '15px' }}>
-                    <span style={{
-                      padding: '5px 12px', borderRadius: '20px',
-                      fontSize: '12px', fontWeight: 'bold',
-                      background: pred.risk === 'High' ? '#f8d7da' :
-                        pred.risk === 'Medium' ? '#fff3cd' : '#d4edda',
-                      color: pred.risk === 'High' ? '#721c24' :
-                        pred.risk === 'Medium' ? '#856404' : '#155724',
-                    }}>
-                      {pred.risk}
-                    </span>
+              {predictions.length === 0 ? (
+                <tr>
+                  <td colSpan="5" style={{ padding: '20px', textAlign: 'center', color: '#666' }}>
+                    No predictions yet!
                   </td>
-                  <td style={{ padding: '15px' }}>{pred.date}</td>
                 </tr>
-              ))}
+              ) : (
+                predictions.map((pred, index) => (
+                  <tr key={pred.prediction_id} style={{
+                    background: index % 2 === 0 ? '#f8f9fa' : 'white',
+                    borderBottom: '1px solid #eee',
+                  }}>
+                    <td style={{ padding: '15px' }}>{pred.prediction_id}</td>
+                    <td style={{ padding: '15px', fontWeight: 'bold' }}>{pred.prediction_type}</td>
+                    <td style={{ padding: '15px' }}>{pred.predicted_value}</td>
+                    <td style={{ padding: '15px' }}>{pred.model_used}</td>
+                    <td style={{ padding: '15px' }}>{pred.prediction_date}</td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
