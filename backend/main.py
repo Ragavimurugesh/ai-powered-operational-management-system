@@ -1,29 +1,29 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from database import engine
-import models
 import sys
 import os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'api'))
 
+from database import engine
+import models
+models.Base.metadata.create_all(bind=engine)
+
 app = FastAPI(title="OpsMind AI API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-models.Base.metadata.create_all(bind=engine)
-
 @app.get("/")
 def home():
     return {"message": "OpsMind AI Backend Running!"}
 
-from api import login, operation, resource, predict, riskapi, recapi, anoapi, healthapi, chatapi
+import login, operation, resource, predict, riskapi, recapi, anoapi, healthapi, chatapi, twin, report, notify
 
 app.include_router(login.router, prefix="/api/auth", tags=["Auth"])
 app.include_router(operation.router, prefix="/api/operations", tags=["Operations"])
@@ -34,3 +34,6 @@ app.include_router(recapi.router, prefix="/api/recommendations", tags=["Recommen
 app.include_router(anoapi.router, prefix="/api/anomaly", tags=["Anomaly"])
 app.include_router(healthapi.router, prefix="/api/health", tags=["Health"])
 app.include_router(chatapi.router, prefix="/api/assistant", tags=["Assistant"])
+app.include_router(twin.router, prefix="/api/twin", tags=["DigitalTwin"])
+app.include_router(report.router, prefix="/api/reports", tags=["Reports"])
+app.include_router(notify.router, prefix="/api/notifications", tags=["Notifications"])
