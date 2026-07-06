@@ -79,3 +79,28 @@ class AIAssistantLog(Base):
     user_query = Column(Text)
     ai_response = Column(Text)
     created_at = Column(DateTime, server_default=func.now())
+
+class DigitalTwin(Base):
+    __tablename__ = "Digital_Twin"
+    twin_id = Column(Integer, primary_key=True, index=True)
+    operation_id = Column(Integer)
+    simulation_name = Column(String(200))
+    scenario_data = Column(Text)
+    simulation_result = Column(Text)
+    created_at = Column(DateTime, server_default=func.now())
+
+class Report(Base):
+    __tablename__ = "Reports"
+    report_id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer)
+    report_title = Column(String(200))
+    report_content = Column(Text)
+    created_at = Column(DateTime, server_default=func.now())
+
+class Notification(Base):
+    __tablename__ = "Notifications"
+    notification_id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer)
+    message = Column(Text)
+    is_read = Column(Boolean, default=False)
+    created_at = Column(DateTime, server_default=func.now())

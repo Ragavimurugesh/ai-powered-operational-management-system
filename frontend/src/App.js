@@ -11,6 +11,9 @@ import Recommendation from './pages/Recommendation';
 import Anomaly from './pages/Anomaly';
 import Health from './pages/Health';
 import Assistant from './pages/Assistant';
+import DigitalTwin from './pages/DigitalTwin';
+import Reports from './pages/Reports';
+import Notifications from './pages/Notifications';
 
 
 
@@ -30,7 +33,9 @@ function App() {
          <Route path="/anomaly" element={<Anomaly />} />
          <Route path="/health" element={<Health />} />
          <Route path="/assistant" element={<Assistant />} />
-        
+        <Route path="/digitaltwin" element={<DigitalTwin />} />
+<Route path="/reports" element={<Reports />} />
+        <Route path="/notifications" element={<Notifications />} />
       </Routes>
     </Router>
   );
