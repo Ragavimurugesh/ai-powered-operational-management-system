@@ -14,6 +14,7 @@ import Assistant from './pages/Assistant';
 import DigitalTwin from './pages/DigitalTwin';
 import Reports from './pages/Reports';
 import Notifications from './pages/Notifications';
+import MLPredict from './pages/MLPredict';
 
 
 
@@ -36,6 +37,8 @@ function App() {
         <Route path="/digitaltwin" element={<DigitalTwin />} />
 <Route path="/reports" element={<Reports />} />
         <Route path="/notifications" element={<Notifications />} />
+        <Route path="/mlpredict" element={<MLPredict />} />cd ~/OneDrive/Desktop/opsmindai
+
       </Routes>
     </Router>
   );
