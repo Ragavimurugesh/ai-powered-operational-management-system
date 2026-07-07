@@ -23,13 +23,13 @@ app.add_middleware(
 def home():
     return {"message": "OpsMind AI Backend Running!"}
 
-import login, operation, resource, predict, riskapi, recapi, anoapi, healthapi, chatapi, twin, report, notify
-
+import login, operation, resource, predict, riskapi, recapi, anoapi, healthapi, chatapi, twin, report, notify, mlapi
 app.include_router(login.router, prefix="/api/auth", tags=["Auth"])
 app.include_router(operation.router, prefix="/api/operations", tags=["Operations"])
 app.include_router(resource.router, prefix="/api/resources", tags=["Resources"])
 app.include_router(predict.router, prefix="/api/predictions", tags=["Predictions"])
 app.include_router(riskapi.router, prefix="/api/risks", tags=["Risks"])
+app.include_router(mlapi.router, prefix="/api/ml", tags=["ML Model"])
 app.include_router(recapi.router, prefix="/api/recommendations", tags=["Recommendations"])
 app.include_router(anoapi.router, prefix="/api/anomaly", tags=["Anomaly"])
 app.include_router(healthapi.router, prefix="/api/health", tags=["Health"])
