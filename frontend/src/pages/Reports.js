@@ -25,6 +25,7 @@ function Reports() {
     { name: '⚙️ Operations', path: '/operations' },
     { name: '📦 Resources', path: '/resources' },
     { name: '🔮 Digital Twin', path: '/digitaltwin' },
+    { name: '🧠 ML Risk Predictor', path: '/mlpredict' },
     { name: '🤖 AI Predictions', path: '/predictions' },
     { name: '⚠️ Risk Analysis', path: '/risks' },
     { name: '💡 Recommendations', path: '/recommendations' },
