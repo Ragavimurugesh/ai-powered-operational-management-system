@@ -1,18 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line, ResponsiveContainer } from 'recharts';
 
 function Dashboard() {
   const navigate = useNavigate();
-  const [counts, setCounts] = useState({
-    operations: 0,
-    resources: 0,
-    predictions: 0,
-    risks: 0,
-    recommendations: 0,
-    anomalies: 0,
-  });
+  
 
   const pieData = [
     { name: 'Completed', value: 8 },
