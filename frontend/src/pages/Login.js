@@ -13,7 +13,7 @@ function Login() {
     setLoading(true);
     setError('');
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/auth/login', {
+      const response = await axios.post("https://ai-powered-operational-management-system-eq8j.onrender.com/api/login", {
         email: email,
         password: password
       });

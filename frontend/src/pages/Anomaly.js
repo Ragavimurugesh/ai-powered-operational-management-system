@@ -11,7 +11,7 @@ function Anomaly() {
     anomaly_description: '', severity: 'Low'
   });
 
-  const API = 'http://127.0.0.1:8000/api/anomaly';
+  const API = "https://ai-powered-operational-management-system-eq8j.onrender.com/api/anomaly";
   useEffect(() => { fetchAnomalies(); }, []);
 
   const fetchAnomalies = async () => {

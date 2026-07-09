@@ -16,8 +16,7 @@ function Operations() {
     user_id: 1
   });
 
-  const API = 'http://127.0.0.1:8000/api/operations';
-
+  const API = "https://ai-powered-operational-management-system-eq8j.onrender.com/api/operations";
   useEffect(() => { fetchOperations(); }, []);
 
   const fetchOperations = async () => {

@@ -16,9 +16,13 @@ function Assistant() {
     setMessages(prev => [...prev, userMessage]);
     setLoading(true);
     try {
-      const res = await axios.post('http://127.0.0.1:8000/api/assistant/chat', {
-        user_id: 1, user_query: input
-      });
+      const res = await axios.post(
+  'https://ai-powered-operational-management-system-eq8j.onrender.com/api/assistant/chat',
+  {
+    user_id: 1,
+    user_query: input
+  }
+);
       setMessages(prev => [...prev, { sender: 'ai', text: res.data.response }]);
     } catch (err) {
       setMessages(prev => [...prev, { sender: 'ai', text: 'Sorry, I could not process that!' }]);
