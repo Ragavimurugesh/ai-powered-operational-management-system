@@ -11,7 +11,7 @@ function Recommendation() {
     priority: 'Medium', generated_date: ''
   });
 
-  const API = "https://ai-powered-operational-management-system-eq8j.onrender.com/api/recommendations";
+  const API = "http://127.0.0.1:8000/api/recommendations";
   useEffect(() => { fetchRecommendations(); }, []);
 
   const fetchRecommendations = async () => {

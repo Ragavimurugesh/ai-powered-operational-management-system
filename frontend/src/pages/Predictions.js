@@ -11,7 +11,7 @@ function Predictions() {
     predicted_value: 0, prediction_date: '', model_used: ''
   });
 
-  const API = "https://ai-powered-operational-management-system-eq8j.onrender.com/api/predictions";
+  const API = "http://127.0.0.1:8000/api/predictions";
   useEffect(() => { fetchPredictions(); }, []);
 
   const fetchPredictions = async () => {

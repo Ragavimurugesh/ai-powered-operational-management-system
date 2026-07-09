@@ -11,7 +11,7 @@ function Health() {
     productivity_score: 0, overall_score: 0
   });
 
-  const API = "https://ai-powered-operational-management-system-eq8j.onrender.com/api/health";
+  const API = 'http://127.0.0.1:8000/api/health';
   useEffect(() => { fetchHealth(); }, []);
 
   const fetchHealth = async () => {

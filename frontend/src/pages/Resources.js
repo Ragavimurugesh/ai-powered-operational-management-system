@@ -15,7 +15,7 @@ function Resources() {
     availability_status: 'Available'
   });
 
-  const API = "https://ai-powered-operational-management-system-eq8j.onrender.com/api/resources";
+  const API = "http://127.0.0.1:8000/api/resources";
   useEffect(() => { fetchResources(); }, []);
 
   const fetchResources = async () => {

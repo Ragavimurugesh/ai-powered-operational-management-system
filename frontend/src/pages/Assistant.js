@@ -17,7 +17,7 @@ function Assistant() {
     setLoading(true);
     try {
       const res = await axios.post(
-  'https://ai-powered-operational-management-system-eq8j.onrender.com/api/assistant/chat',
+  'http://127.0.0.1:8000/api/assistant/chat',
   {
     user_id: 1,
     user_query: input

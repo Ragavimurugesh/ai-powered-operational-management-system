@@ -15,7 +15,7 @@ function Register() {
     setLoading(true);
     setError('');
     try {
-      await axios.post("https://ai-powered-operational-management-system-eq8j.onrender.com/api/register", {
+      await axios.post("http://127.0.0.1:8000/api/register", {
         name, email, password, role
       });
       alert('Registration Successful! Please Login!');
