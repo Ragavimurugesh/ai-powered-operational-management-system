@@ -14,14 +14,42 @@ function Register() {
   const handleRegister = async () => {
     setLoading(true);
     setError('');
+    
+    // Frontend validation
+    if (!name.trim()) {
+      setError('❌ Name is required');
+      setLoading(false);
+      return;
+    }
+    if (!email.trim()) {
+      setError('❌ Email is required');
+      setLoading(false);
+      return;
+    }
+    if (!password.trim()) {
+      setError('❌ Password is required');
+      setLoading(false);
+      return;
+    }
+    if (!role) {
+      setError('❌ Please select a role');
+      setLoading(false);
+      return;
+    }
+
     try {
-      await axios.post("http://127.0.0.1:8000/api/register", {
+      await axios.post("http://127.0.0.1:8000/api/auth/register", {
         name, email, password, role
       });
-      alert('Registration Successful! Please Login!');
+      alert('✅ Registration Successful! Please Login!');
       navigate('/');
     } catch (err) {
-      setError('Registration failed! Email may already exist!');
+      // Catch backend error message
+      if (err.response && err.response.data) {
+        setError(`❌ ${err.response.data.detail || 'Registration failed!'}`);
+      } else {
+        setError('❌ Registration failed! Please try again.');
+      }
     }
     setLoading(false);
   };
@@ -87,7 +115,7 @@ function Register() {
             borderRadius: '10px', marginBottom: '20px',
             fontSize: '14px', textAlign: 'center',
           }}>
-            ❌ {error}
+            {error}
           </div>
         )}
 
