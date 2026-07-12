@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'api'))
 
 from database import engine
 import models
-models.Base.metadata.create_all(bind=engine)
+
 
 app = FastAPI(title="OpsMind AI API")
 
