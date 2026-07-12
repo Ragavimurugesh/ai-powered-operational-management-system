@@ -15,7 +15,7 @@ function MLPredict() {
   const handlePredict = async () => {
     setLoading(true);
     try {
-     const res = await axios.post("http://127.0.0.1:8000/api/ml/predict", input);
+     const res = await axios.post("https://ai-powered-operational-management-system-eq8j.onrender.com/api/ml/predict", input);
       setResult(res.data);
     } catch (err) {
       console.log(err);

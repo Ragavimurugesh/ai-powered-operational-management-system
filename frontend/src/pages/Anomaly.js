@@ -10,9 +10,8 @@ function Anomaly() {
     operation_id: 1, anomaly_type: '',
     anomaly_description: '', severity: 'Low'
   });
-
-  const API = "http://127.0.0.1:8000/api/anomaly";
-  useEffect(() => { fetchAnomalies(); }, []);
+const API = 'https://ai-powered-operational-management-system-eq8j.onrender.com/api/anomaly';
+useEffect(() => { fetchAnomalies(); }, []);
 
   const fetchAnomalies = async () => {
     try {

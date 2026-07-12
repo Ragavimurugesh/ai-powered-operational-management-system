@@ -11,7 +11,7 @@ function RiskAnalysis() {
     risk_description: '', risk_score: 0
   });
 
-  const API = "http://127.0.0.1:8000/api/risk";
+  const API = 'https://ai-powered-operational-management-system-eq8j.onrender.com/api/risk';
   useEffect(() => { fetchRisks(); }, []);
 
   const fetchRisks = async () => {
