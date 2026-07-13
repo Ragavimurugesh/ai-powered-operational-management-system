@@ -38,7 +38,7 @@ function Register() {
     }
 
     try {
-      await axios.post("https://ai-powered-operational-management-system-eq8j.onrender.com/api/auth/register", {
+      await axios.post("https://ai-powered-operational-management-system-qc2nr9g0c-opsmindai.vercel.app/register", {
         name, email, password, role
       });
       alert('✅ Registration Successful! Please Login!');
