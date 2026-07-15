@@ -7,14 +7,14 @@ import Operations from './pages/Operations';
 import Resources from './pages/Resources';
 import Predictions from './pages/Predictions';
 import RiskAnalysis from './pages/RiskAnalysis';
-import Recommendations from './pages/Recommendations';
-import AnomalyDetection from './pages/AnomalyDetection';
-import HealthScore from './pages/HealthScore';
+import Recommendation from './pages/Recommendation';
+import Anomaly from './pages/Anomaly';
+import Health from './pages/Health';
 import Reports from './pages/Reports';
 import Notifications from './pages/Notifications';
-import AIAssistant from './pages/AIAssistant';
+import Assistant from './pages/Assistant';
 import DigitalTwin from './pages/DigitalTwin';
-import MLRiskPredictor from './pages/MLRiskPredictor';
+import MLPredict from './pages/MLPredict';
 
 function App() {
   return (
@@ -27,14 +27,14 @@ function App() {
         <Route path="/resources" element={<Resources />} />
         <Route path="/predictions" element={<Predictions />} />
         <Route path="/risk-analysis" element={<RiskAnalysis />} />
-        <Route path="/recommendations" element={<Recommendations />} />
-        <Route path="/anomaly-detection" element={<AnomalyDetection />} />
-        <Route path="/health-score" element={<HealthScore />} />
+        <Route path="/recommendations" element={<Recommendation />} />
+        <Route path="/anomaly-detection" element={<Anomaly />} />
+        <Route path="/health-score" element={<Health />} />
         <Route path="/reports" element={<Reports />} />
         <Route path="/notifications" element={<Notifications />} />
-        <Route path="/ai-assistant" element={<AIAssistant />} />
+        <Route path="/ai-assistant" element={<Assistant />} />
         <Route path="/digital-twin" element={<DigitalTwin />} />
-        <Route path="/ml-risk-predictor" element={<MLRiskPredictor />} />
+        <Route path="/ml-risk-predictor" element={<MLPredict />} />
       </Routes>
     </BrowserRouter>
   );
