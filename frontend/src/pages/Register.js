@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { authAPI } from '../services/api';
 
 function Register() {
   const [name, setName] = useState('');
@@ -15,7 +15,6 @@ function Register() {
     setLoading(true);
     setError('');
     
-    // Frontend validation
     if (!name.trim()) {
       setError('❌ Name is required');
       setLoading(false);
@@ -38,13 +37,10 @@ function Register() {
     }
 
     try {
-      await axios.post("https://ai-powered-operational-management-system-qc2nr9g0c-opsmindai.vercel.app/register", {
-        name, email, password, role
-      });
+      await authAPI.register({ name, email, password, role });
       alert('✅ Registration Successful! Please Login!');
       navigate('/');
     } catch (err) {
-      // Catch backend error message
       if (err.response && err.response.data) {
         setError(`❌ ${err.response.data.detail || 'Registration failed!'}`);
       } else {

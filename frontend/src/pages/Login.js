@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { authAPI } from '../services/api';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -25,14 +25,9 @@ function Login() {
     }
 
     try {
-      const response = await axios.post('https://ai-powered-operational-management-system-eq8j.onrender.com/api/auth/login', {
-        email, password
-      });
-      
-      // Store user data in localStorage
+      const response = await authAPI.login({ email, password });
       localStorage.setItem('user', JSON.stringify(response.data));
       localStorage.setItem('token', response.data.user_id);
-      
       alert('✅ Login Successful!');
       navigate('/dashboard');
     } catch (err) {

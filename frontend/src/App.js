@@ -1,47 +1,76 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
-import Operations from './pages/Operations';
-import Resources from './pages/Resources';
-import Predictions from './pages/Predictions';
-import RiskAnalysis from './pages/RiskAnalysis';
-import Recommendation from './pages/Recommendation';
-import Anomaly from './pages/Anomaly';
-import Health from './pages/Health';
-import Assistant from './pages/Assistant';
-import DigitalTwin from './pages/DigitalTwin';
-import Reports from './pages/Reports';
-import Notifications from './pages/Notifications';
-import MLPredict from './pages/MLPredict';
+import axios from 'axios';
 
+const API_BASE = "https://ai-powered-operational-management-system-eq8j.onrender.com";
 
+export const apiClient = axios.create({
+  baseURL: API_BASE,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
+export const authAPI = {
+  register: (data) => apiClient.post('/api/auth/register', data),
+  login: (data) => apiClient.post('/api/auth/login', data),
+  getUsers: () => apiClient.get('/api/auth/users'),
+  getUser: (id) => apiClient.get(`/api/auth/users/${id}`),
+};
 
-function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/operations" element={<Operations />} />
-        <Route path="/resources" element={<Resources />} />
-        <Route path="/predictions" element={<Predictions />} />
-         <Route path="/risks" element={<RiskAnalysis />} />
-         <Route path="/recommendations" element={<Recommendation />} />
-         <Route path="/anomaly" element={<Anomaly />} />
-         <Route path="/health" element={<Health />} />
-         <Route path="/assistant" element={<Assistant />} />
-        <Route path="/digitaltwin" element={<DigitalTwin />} />
-<Route path="/reports" element={<Reports />} />
-        <Route path="/notifications" element={<Notifications />} />
-        <Route path="/mlpredict" element={<MLPredict />} />cd ~/OneDrive/Desktop/opsmindai
+export const operationAPI = {
+  getAll: () => apiClient.get('/api/operations'),
+  create: (data) => apiClient.post('/api/operations', data),
+};
 
-      </Routes>
-    </Router>
-  );
-}
+export const resourceAPI = {
+  getAll: () => apiClient.get('/api/resources'),
+  create: (data) => apiClient.post('/api/resources', data),
+};
 
-export default App;
+export const predictionAPI = {
+  getAll: () => apiClient.get('/api/predictions'),
+  create: (data) => apiClient.post('/api/predictions', data),
+};
+
+export const riskAPI = {
+  getAll: () => apiClient.get('/api/risks'),
+  create: (data) => apiClient.post('/api/risks', data),
+};
+
+export const recommendationAPI = {
+  getAll: () => apiClient.get('/api/recommendations'),
+  create: (data) => apiClient.post('/api/recommendations', data),
+};
+
+export const anomalyAPI = {
+  getAll: () => apiClient.get('/api/anomaly'),
+  create: (data) => apiClient.post('/api/anomaly', data),
+};
+
+export const healthAPI = {
+  getAll: () => apiClient.get('/api/health'),
+  create: (data) => apiClient.post('/api/health', data),
+};
+
+export const reportAPI = {
+  getAll: () => apiClient.get('/api/reports'),
+  create: (data) => apiClient.post('/api/reports', data),
+};
+
+export const notificationAPI = {
+  getByUser: (userId) => apiClient.get(`/api/notifications/${userId}`),
+  create: (data) => apiClient.post('/api/notifications', data),
+};
+
+export const assistantAPI = {
+  chat: (data) => apiClient.post('/api/assistant/chat', data),
+};
+
+export const twinAPI = {
+  getAll: () => apiClient.get('/api/twin'),
+  create: (data) => apiClient.post('/api/twin', data),
+};
+
+export const mlAPI = {
+  info: () => apiClient.get('/api/ml/info'),
+  predict: (data) => apiClient.post('/api/ml/predict', data),
+};
