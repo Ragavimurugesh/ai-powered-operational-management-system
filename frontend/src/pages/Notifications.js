@@ -8,20 +8,20 @@ function Notifications() {
   const userId = JSON.parse(localStorage.getItem('user'))?.user_id || 1;
 
   useEffect(() => {
-    fetchNotifications();
-  }, []);
+    const fetchNotifications = async () => {
+      setLoading(true);
+      try {
+        const response = await notificationAPI.getByUser(userId);
+        setNotifications(response.data);
+      } catch (err) {
+        setError('Failed to load notifications');
+        console.error(err);
+      }
+      setLoading(false);
+    };
 
-  const fetchNotifications = async () => {
-    setLoading(true);
-    try {
-      const response = await notificationAPI.getByUser(userId);
-      setNotifications(response.data);
-    } catch (err) {
-      setError('Failed to load notifications');
-      console.error(err);
-    }
-    setLoading(false);
-  };
+    fetchNotifications();
+  }, [userId]);
 
   if (loading) return <div style={{ padding: '20px' }}>Loading...</div>;
 
