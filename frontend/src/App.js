@@ -1,76 +1,43 @@
-import axios from 'axios';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import Operations from './pages/Operations';
+import Resources from './pages/Resources';
+import Predictions from './pages/Predictions';
+import RiskAnalysis from './pages/RiskAnalysis';
+import Recommendations from './pages/Recommendations';
+import AnomalyDetection from './pages/AnomalyDetection';
+import HealthScore from './pages/HealthScore';
+import Reports from './pages/Reports';
+import Notifications from './pages/Notifications';
+import AIAssistant from './pages/AIAssistant';
+import DigitalTwin from './pages/DigitalTwin';
+import MLRiskPredictor from './pages/MLRiskPredictor';
 
-const API_BASE = "https://ai-powered-operational-management-system-eq8j.onrender.com";
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/operations" element={<Operations />} />
+        <Route path="/resources" element={<Resources />} />
+        <Route path="/predictions" element={<Predictions />} />
+        <Route path="/risk-analysis" element={<RiskAnalysis />} />
+        <Route path="/recommendations" element={<Recommendations />} />
+        <Route path="/anomaly-detection" element={<AnomalyDetection />} />
+        <Route path="/health-score" element={<HealthScore />} />
+        <Route path="/reports" element={<Reports />} />
+        <Route path="/notifications" element={<Notifications />} />
+        <Route path="/ai-assistant" element={<AIAssistant />} />
+        <Route path="/digital-twin" element={<DigitalTwin />} />
+        <Route path="/ml-risk-predictor" element={<MLRiskPredictor />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
 
-export const apiClient = axios.create({
-  baseURL: API_BASE,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-export const authAPI = {
-  register: (data) => apiClient.post('/api/auth/register', data),
-  login: (data) => apiClient.post('/api/auth/login', data),
-  getUsers: () => apiClient.get('/api/auth/users'),
-  getUser: (id) => apiClient.get(`/api/auth/users/${id}`),
-};
-
-export const operationAPI = {
-  getAll: () => apiClient.get('/api/operations'),
-  create: (data) => apiClient.post('/api/operations', data),
-};
-
-export const resourceAPI = {
-  getAll: () => apiClient.get('/api/resources'),
-  create: (data) => apiClient.post('/api/resources', data),
-};
-
-export const predictionAPI = {
-  getAll: () => apiClient.get('/api/predictions'),
-  create: (data) => apiClient.post('/api/predictions', data),
-};
-
-export const riskAPI = {
-  getAll: () => apiClient.get('/api/risks'),
-  create: (data) => apiClient.post('/api/risks', data),
-};
-
-export const recommendationAPI = {
-  getAll: () => apiClient.get('/api/recommendations'),
-  create: (data) => apiClient.post('/api/recommendations', data),
-};
-
-export const anomalyAPI = {
-  getAll: () => apiClient.get('/api/anomaly'),
-  create: (data) => apiClient.post('/api/anomaly', data),
-};
-
-export const healthAPI = {
-  getAll: () => apiClient.get('/api/health'),
-  create: (data) => apiClient.post('/api/health', data),
-};
-
-export const reportAPI = {
-  getAll: () => apiClient.get('/api/reports'),
-  create: (data) => apiClient.post('/api/reports', data),
-};
-
-export const notificationAPI = {
-  getByUser: (userId) => apiClient.get(`/api/notifications/${userId}`),
-  create: (data) => apiClient.post('/api/notifications', data),
-};
-
-export const assistantAPI = {
-  chat: (data) => apiClient.post('/api/assistant/chat', data),
-};
-
-export const twinAPI = {
-  getAll: () => apiClient.get('/api/twin'),
-  create: (data) => apiClient.post('/api/twin', data),
-};
-
-export const mlAPI = {
-  info: () => apiClient.get('/api/ml/info'),
-  predict: (data) => apiClient.post('/api/ml/predict', data),
-};
+export default App;
