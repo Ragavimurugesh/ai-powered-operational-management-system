@@ -1,23 +1,21 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import sys
+from fastapi.staticfiles import StaticFiles
 import os
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'api'))
-
-from database import engine
 import models
+from database import engine
 
-
+# CORS Configuration
 app = FastAPI(title="OpsMind AI API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # Allow all origins
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 @app.get("/")
 def home():
