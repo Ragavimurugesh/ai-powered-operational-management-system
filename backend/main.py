@@ -4,10 +4,9 @@ import models
 from database import engine
 from api import login, operation, resource, prediction, riskapi, mlapi, recommendation, anomaly, health, assistant, twin, report, notification
 
-# Create app
 app = FastAPI(title="OpsMind AI API")
 
-# ADD CORS FIRST - Before anything else!
+# ADD CORS FIRST!
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -16,7 +15,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Create tables
+# Create database
 try:
     models.Base.metadata.create_all(bind=engine)
 except:
