@@ -1,2 +1,7 @@
 node_modules/
-opsmind.db
+__pycache__/
+*.pyc
+.venv/
+frontend/build/
+.DS_Store
+.env

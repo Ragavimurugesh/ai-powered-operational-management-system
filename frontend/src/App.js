@@ -26,15 +26,15 @@ function App() {
         <Route path="/operations" element={<Operations />} />
         <Route path="/resources" element={<Resources />} />
         <Route path="/predictions" element={<Predictions />} />
-        <Route path="/risk-analysis" element={<RiskAnalysis />} />
+        <Route path="/risks" element={<RiskAnalysis />} />
         <Route path="/recommendations" element={<Recommendation />} />
-        <Route path="/anomaly-detection" element={<Anomaly />} />
-        <Route path="/health-score" element={<Health />} />
+        <Route path="/anomaly" element={<Anomaly />} />
+        <Route path="/health" element={<Health />} />
         <Route path="/reports" element={<Reports />} />
         <Route path="/notifications" element={<Notifications />} />
-        <Route path="/ai-assistant" element={<Assistant />} />
-        <Route path="/digital-twin" element={<DigitalTwin />} />
-        <Route path="/ml-risk-predictor" element={<MLPredict />} />
+        <Route path="/assistant" element={<Assistant />} />
+        <Route path="/digitaltwin" element={<DigitalTwin />} />
+        <Route path="/mlpredict" element={<MLPredict />} />
       </Routes>
     </BrowserRouter>
   );

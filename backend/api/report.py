@@ -26,6 +26,7 @@ def create_report(report: ReportCreate, db: Session = Depends(get_db)):
 @router.delete("/{report_id}")
 def delete_report(report_id: int, db: Session = Depends(get_db)):
     report = db.query(Report).filter(Report.report_id == report_id).first()
-    db.delete(report)
-    db.commit()
+    if report:
+        db.delete(report)
+        db.commit()
     return {"message": "Deleted!"}
