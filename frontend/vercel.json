@@ -1,0 +1,7 @@
+cat > vercel.json << 'EOF'
+{
+  "buildCommand": "cd frontend && npm run build",
+  "outputDirectory": "frontend/build",
+  "framework": "react"
+}
+EOF

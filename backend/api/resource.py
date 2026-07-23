@@ -28,6 +28,7 @@ def create_resource(res: ResourceCreate, db: Session = Depends(get_db)):
 @router.delete("/{resource_id}")
 def delete_resource(resource_id: int, db: Session = Depends(get_db)):
     res = db.query(Resource).filter(Resource.resource_id == resource_id).first()
-    db.delete(res)
-    db.commit()
+    if res:
+        db.delete(res)
+        db.commit()
     return {"message": "Deleted!"}

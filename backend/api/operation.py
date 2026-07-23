@@ -29,6 +29,7 @@ def create_operation(op: OperationCreate, db: Session = Depends(get_db)):
 @router.delete("/{operation_id}")
 def delete_operation(operation_id: int, db: Session = Depends(get_db)):
     op = db.query(Operation).filter(Operation.operation_id == operation_id).first()
-    db.delete(op)
-    db.commit()
+    if op:
+        db.delete(op)
+        db.commit()
     return {"message": "Deleted!"}

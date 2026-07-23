@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -10,18 +10,15 @@ import RiskAnalysis from './pages/RiskAnalysis';
 import Recommendation from './pages/Recommendation';
 import Anomaly from './pages/Anomaly';
 import Health from './pages/Health';
-import Assistant from './pages/Assistant';
-import DigitalTwin from './pages/DigitalTwin';
 import Reports from './pages/Reports';
 import Notifications from './pages/Notifications';
+import Assistant from './pages/Assistant';
+import DigitalTwin from './pages/DigitalTwin';
 import MLPredict from './pages/MLPredict';
-
-
-
 
 function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -29,18 +26,17 @@ function App() {
         <Route path="/operations" element={<Operations />} />
         <Route path="/resources" element={<Resources />} />
         <Route path="/predictions" element={<Predictions />} />
-         <Route path="/risks" element={<RiskAnalysis />} />
-         <Route path="/recommendations" element={<Recommendation />} />
-         <Route path="/anomaly" element={<Anomaly />} />
-         <Route path="/health" element={<Health />} />
-         <Route path="/assistant" element={<Assistant />} />
-        <Route path="/digitaltwin" element={<DigitalTwin />} />
-<Route path="/reports" element={<Reports />} />
+        <Route path="/risks" element={<RiskAnalysis />} />
+        <Route path="/recommendations" element={<Recommendation />} />
+        <Route path="/anomaly" element={<Anomaly />} />
+        <Route path="/health" element={<Health />} />
+        <Route path="/reports" element={<Reports />} />
         <Route path="/notifications" element={<Notifications />} />
-        <Route path="/mlpredict" element={<MLPredict />} />cd ~/OneDrive/Desktop/opsmindai
-
+        <Route path="/assistant" element={<Assistant />} />
+        <Route path="/digitaltwin" element={<DigitalTwin />} />
+        <Route path="/mlpredict" element={<MLPredict />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
 
